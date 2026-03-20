@@ -61,6 +61,14 @@ COLOR_SCHEMES = {
 }
 
 STYLES = {
+    '会议纪要': {
+        'radius': '12px',
+        'shadow': '0 1px 3px rgba(0,0,0,0.1)',
+        'shadow-hover': '0 4px 6px rgba(0,0,0,0.15)',
+        'border': '1px solid #E5E7EB',
+        'transform': 'translateY(-2px)',
+        'description': '会议纪要模板，专业简洁，适用于正式报告 ⭐默认'
+    },
     '现代简约': {
         'radius': '16px',
         'shadow': '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
@@ -209,19 +217,42 @@ def parse_markdown_content(content: str) -> dict:
 def generate_css(color_name: str, style_name: str, device_name: str) -> str:
     """生成 CSS 样式"""
     
-    colors = COLOR_SCHEMES.get(color_name, COLOR_SCHEMES['紫蓝渐变'])
+    # 会议纪要风格使用专属配色
+    if style_name == '会议纪要':
+        colors = {
+            'primary': '#1E40AF',
+            'primary-light': '#3B82F6',
+            'accent': '#F59E0B',
+            'gradient': 'linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%)',
+            'description': '会议纪要专业配色'
+        }
+    else:
+        colors = COLOR_SCHEMES.get(color_name, COLOR_SCHEMES['紫蓝渐变'])
+    
     style = STYLES.get(style_name, STYLES['现代简约'])
     device = DEVICE_CONFIGS.get(device_name, DEVICE_CONFIGS['responsive'])
+    
+    # 会议纪要风格使用浅灰背景 + 白色卡片
+    if style_name == '会议纪要':
+        body_bg = '#F3F4F6'
+        card_bg = '#FFFFFF'
+        text_primary = '#1F2937'
+        text_secondary = '#4B5563'
+    else:
+        body_bg = colors['gradient']
+        card_bg = '#ffffff'
+        text_primary = '#2d3748'
+        text_secondary = '#718096'
     
     css = f'''
         :root {{
             --primary: {colors['primary']};
             --primary-light: {colors['primary-light']};
             --accent: {colors['accent']};
-            --bg: #f8f9fa;
-            --card-bg: #ffffff;
-            --text: #2d3748;
-            --text-light: #718096;
+            --bg: {body_bg};
+            --card-bg: {card_bg};
+            --text: {text_primary};
+            --text-light: {text_secondary};
             --radius: {style['radius']};
             --shadow: {style['shadow']};
             --shadow-hover: {style['shadow-hover']};
@@ -231,7 +262,7 @@ def generate_css(color_name: str, style_name: str, device_name: str) -> str:
         
         body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: {colors['gradient']};
+            background: var(--bg);
             min-height: 100vh;
             padding: {device['container-padding']};
             color: var(--text);
@@ -240,24 +271,26 @@ def generate_css(color_name: str, style_name: str, device_name: str) -> str:
         .container {{
             max-width: {device['container-max']};
             margin: 0 auto;
+            {"background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 40px;" if style_name == '会议纪要' else ""}
         }}
         
         .header {{
-            text-align: center;
-            color: white;
+            text-align: {"left" if style_name == '会议纪要' else "center"};
+            color: {"var(--text)" if style_name == '会议纪要' else "white"};
             margin-bottom: 40px;
+            {"border-bottom: 2px solid #E5E7EB; padding-bottom: 32px;" if style_name == '会议纪要' else ""}
         }}
         
         .header h1 {{
             font-size: {device['title-font']};
             font-weight: 700;
             margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            {"text-shadow: none;" if style_name == '会议纪要' else "text-shadow: 0 2px 4px rgba(0,0,0,0.2);"}
         }}
         
         .header p {{
             font-size: 1.1rem;
-            opacity: 0.9;
+            {"color: var(--text-light);" if style_name == '会议纪要' else "opacity: 0.9;"}
         }}
         
         .metrics-grid {{
@@ -268,7 +301,7 @@ def generate_css(color_name: str, style_name: str, device_name: str) -> str:
         }}
         
         .metric-card {{
-            background: var(--card-bg);
+            background: {"linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%)" if style_name == '会议纪要' else "var(--card-bg)"};
             border-radius: var(--radius);
             padding: {device['card-padding']};
             box-shadow: var(--shadow);
@@ -283,7 +316,7 @@ def generate_css(color_name: str, style_name: str, device_name: str) -> str:
         
         .metric-card .label {{
             font-size: 0.875rem;
-            color: var(--text-light);
+            color: {"rgba(255,255,255,0.9)" if style_name == '会议纪要' else "var(--text-light)"};
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 10px;
@@ -292,10 +325,7 @@ def generate_css(color_name: str, style_name: str, device_name: str) -> str:
         .metric-card .value {{
             font-size: {device['value-font']};
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            {"color: white;" if style_name == '会议纪要' else "background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"}
         }}
         
         .content-section {{
@@ -332,10 +362,10 @@ def generate_css(color_name: str, style_name: str, device_name: str) -> str:
         
         .footer {{
             text-align: center;
-            color: white;
+            color: {"var(--text-light)" if style_name == '会议纪要' else "white"};
             margin-top: 40px;
             padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.2);
+            border-top: {"1px solid #E5E7EB" if style_name == '会议纪要' else "1px solid rgba(255,255,255,0.2)"};
             opacity: 0.8;
             font-size: 0.9rem;
         }}
@@ -474,9 +504,9 @@ def generate_infographic(content: str, color: str = '紫蓝渐变', style: str =
 @click.option('--color', '-c', default='紫蓝渐变', 
               type=click.Choice(list(COLOR_SCHEMES.keys())),
               help='色系选择')
-@click.option('--style', '-s', default='现代简约',
+@click.option('--style', '-s', default='会议纪要',
               type=click.Choice(list(STYLES.keys())),
-              help='风格选择')
+              help='风格选择（默认：会议纪要）')
 @click.option('--device', '-d', default='responsive',
               type=click.Choice(list(DEVICE_CONFIGS.keys())),
               help='终端适配')

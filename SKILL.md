@@ -109,52 +109,71 @@ description: |
 
 ---
 
-## 🎭 五大风格（--style）
+## 🎭 六大风格（--style）
 
-### 1. 现代简约 (default)
+### 1. 会议纪要 (default) ⭐
+```css
+--primary: #1E40AF (深蓝)
+--secondary: #3B82F6 (亮蓝)
+--accent: #F59E0B (琥珀)
+.background: #F3F4F6 (浅灰页面) + #FFFFFF (白色卡片)
+.border-radius: 12px
+.box-shadow: 0 1px 3px rgba(0,0,0,0.1)
+.header: 左对齐，底部边框分隔
+.metrics: 蓝紫渐变背景卡片，白色文字
+```
+**特点**: 专业简洁、正式报告风格、浅灰背景 + 白色卡片、指标卡片渐变背景  
+**适用**: 会议纪要、正式报告、政府/企业文档 ⭐默认模板
+
+### 2. 现代简约
 ```css
 .border-radius: 16px
 .box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1)
 .font-weight: 400-700
 .spacing: generous
 ```
-**特点**: 圆角卡片、柔和阴影、留白充足、清晰易读
+**特点**: 圆角卡片、柔和阴影、留白充足、清晰易读  
+**适用**: 通用场景
 
-### 2. 科技感
+### 3. 科技感
 ```css
 .border-radius: 8px
 .box-shadow: 0 0 20px rgba(102,126,234,0.3)
 .border: 1px solid rgba(255,255,255,0.1)
 .effects: glow, gradient-border
 ```
-**特点**: 发光效果、科技蓝、未来感、动态渐变
+**特点**: 发光效果、科技蓝、未来感、动态渐变  
+**适用**: 互联网、AI、科技产品
 
-### 3. 商务正式
+### 4. 商务正式
 ```css
 .border-radius: 4px
 .box-shadow: 0 2px 4px rgba(0,0,0,0.1)
 .border: 1px solid #e2e8f0
 .font: serif/sans-serif mix
 ```
-**特点**: 小圆角、保守阴影、边框清晰、专业稳重
+**特点**: 小圆角、保守阴影、边框清晰、专业稳重  
+**适用**: 政府、企业、正式报告
 
-### 4. 创意活泼
+### 5. 创意活泼
 ```css
 .border-radius: 24px
 .box-shadow: 8px 8px 0px rgba(0,0,0,0.1)
 .transform: rotate(-2deg) hover
 .colors: vibrant, multi-color
 ```
-**特点**: 大圆角、硬阴影、倾斜动画、多彩配色
+**特点**: 大圆角、硬阴影、倾斜动画、多彩配色  
+**适用**: 营销、活动、创意展示
 
-### 5. 高端奢华
+### 6. 高端奢华
 ```css
 .border-radius: 12px
 .box-shadow: 0 20px 40px rgba(0,0,0,0.2)
 .border: 1px solid rgba(255,215,0,0.3)
 .gradient: gold accents
 ```
-**特点**: 金色点缀、深度阴影、精致细节、奢华感
+**特点**: 金色点缀、深度阴影、精致细节、奢华感  
+**适用**: 奢侈品、高端发布会
 
 ---
 
@@ -258,7 +277,14 @@ python3 scripts/generate.py content.md --device mobile
 
 ## 🎯 参数组合示例
 
-### 示例 1: 法律科技报告
+### 示例 1: 会议纪要（默认）⭐
+```
+--style "会议纪要"
+--device "responsive"
+```
+**效果**: 专业简洁，浅灰背景 + 白色卡片，指标卡片渐变背景，适合正式报告
+
+### 示例 2: 法律科技报告
 ```
 --color "深蓝专业"
 --device "responsive"
@@ -266,7 +292,7 @@ python3 scripts/generate.py content.md --device mobile
 ```
 **效果**: 专业稳重，适合政府/法律场景
 
-### 示例 2: 营销活动页
+### 示例 3: 营销活动页
 ```
 --color "橙红活力"
 --device "mobile"
@@ -274,7 +300,7 @@ python3 scripts/generate.py content.md --device mobile
 ```
 **效果**: 年轻活力，适合社交媒体传播
 
-### 示例 3: 环保主题
+### 示例 4: 环保主题
 ```
 --color "青绿清新"
 --device "desktop"
@@ -282,7 +308,7 @@ python3 scripts/generate.py content.md --device mobile
 ```
 **效果**: 清新自然，适合教育/公益
 
-### 示例 4: 高端发布会
+### 示例 5: 高端发布会
 ```
 --color "极简黑白"
 --device "desktop"
@@ -290,7 +316,7 @@ python3 scripts/generate.py content.md --device mobile
 ```
 **效果**: 简约奢华，适合产品发布
 
-### 示例 5: 参考图复刻
+### 示例 6: 参考图复刻
 ```
 --template "reference.png"
 --device "responsive"
@@ -394,8 +420,8 @@ usage: generate.py [-h] [--color COLOR] [--device DEVICE] [--style STYLE]
                      默认：responsive
   
   --style, -s        风格选择
-                     可选：现代简约/科技感/商务正式/创意活泼/高端奢华
-                     默认：现代简约
+                     可选：会议纪要/现代简约/科技感/商务正式/创意活泼/高端奢华
+                     默认：会议纪要 ⭐
   
   --template, -t     参考图路径（自动提取设计参数）
   
