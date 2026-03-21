@@ -2,7 +2,10 @@
 name: html-infographic
 description: |
   HTML 信息图自动生成技能。支持多色系、多风格、多终端适配，可从参考图提取设计参数。
-  内置模板：会议纪要信息图（详细设计参数，大模型直出）
+  内置模板：
+- **蓝色商务风格**（默认）⭐⭐⭐ - 深蓝渐变头部、卡片顶部渐变条、文字渐变效果、悬停动画
+- 会议纪要信息图（专业简洁，正式报告）
+- 其他风格：现代简约/科技感/商务正式/创意活泼/高端奢华
   
   TRIGGERS - 使用此技能当用户：
   - "生成信息图" / "创建信息图"
@@ -10,10 +13,12 @@ description: |
   - "制作数据看板" / "生成报告页面"
   - 提供内容并要求生成可视化 HTML
   - "参考这张图生成" / "按这个风格做"
-  - "用会议纪要风格生成"
+  - "用蓝色商务风格生成"
   
   参数：--color 色系 --device 终端 --style 风格 --template 模板名/参考图
   输出：完整 HTML 代码 + 独立项目文件夹保存
+  
+  **默认行为**: 当用户未指定风格时，使用蓝色商务风格（基于 2026-03-21 用户参考图设计）
 ---
 
 # HTML Infographic - 专业信息图生成技能
@@ -111,7 +116,34 @@ description: |
 
 ## 🎭 六大风格（--style）
 
-### 1. 会议纪要 (default) ⭐
+### 0. 蓝色商务风格 (default) ⭐⭐⭐ NEW
+```css
+--primary-blue: #1E3A8A (深蓝主色)
+--primary-light: #3B82F6 (亮蓝渐变)
+--accent-cyan: #06B6D4 (青色强调)
+--bg-light: #F0F9FF (浅蓝背景)
+--card-white: #FFFFFF (白色卡片)
+--text-dark: #1E293B (深色文字)
+--text-gray: #64748B (灰色文字)
+--border-radius: 12px (圆角)
+--shadow: 0 4px 12px rgba(30,58,138,0.15) (阴影)
+--gradient-header: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)
+--gradient-text: linear-gradient(135deg, #1E3A8A 0%, #06B6D4 100%)
+--gradient-card-top: linear-gradient(90deg, #1E3A8A 0%, #06B6D4 100%)
+```
+**特点**: 
+- 深蓝渐变头部 + 圆形装饰元素
+- 卡片顶部蓝色渐变条
+- 文字使用渐变色效果
+- 圆角 12px，柔和阴影
+- 数据卡片悬停上浮动画
+- 强调卡片深蓝背景 + 青色文字
+- 浅蓝渐变背景 (#F0F9FF → #E0F2FE)
+
+**适用**: 政府报告、法律科技、商务文档、正式报告、数据图解 ⭐默认推荐  
+**来源**: 基于用户参考图提取设计参数 (2026-03-21)
+
+### 1. 会议纪要 ⭐
 ```css
 --primary: #1E40AF (深蓝)
 --secondary: #3B82F6 (亮蓝)
@@ -123,7 +155,7 @@ description: |
 .metrics: 蓝紫渐变背景卡片，白色文字
 ```
 **特点**: 专业简洁、正式报告风格、浅灰背景 + 白色卡片、指标卡片渐变背景  
-**适用**: 会议纪要、正式报告、政府/企业文档 ⭐默认模板
+**适用**: 会议纪要、正式报告、政府/企业文档
 
 ### 2. 现代简约
 ```css
@@ -219,70 +251,80 @@ python3 scripts/generate.py content.md --device mobile
 
 ## 📋 HTML 生成模板
 
-### 基础结构（所有风格通用）
+### 蓝色商务风格模板（默认）⭐⭐⭐
+
+当用户选择或默认使用蓝色商务风格时，直接生成以下完整 HTML：
 
 ```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{标题}</title>
-  <style>
-    :root {
-      --primary: {主色};
-      --primary-light: {渐变终点};
-      --accent: {强调色};
-      --bg: {背景色};
-      --card-bg: {卡片背景};
-      --text: {文字色};
-      --text-light: {次要文字};
-      --radius: {圆角大小};
-      --shadow: {阴影};
-    }
-    
-    body {
-      background: var(--gradient);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    
-    /* 响应式断点 */
-    @media (max-width: 768px) { /* 移动端样式 */ }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{标题}</title>
+    <style>
+        :root {
+            --primary-blue: #1E3A8A;
+            --primary-light: #3B82F6;
+            --accent-cyan: #06B6D4;
+            --bg-light: #F0F9FF;
+            --card-white: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-gray: #64748B;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(30,58,138,0.15);
+        }
+        
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, #F0F9FF 0%, #E0F2FE 100%);
+            padding: 20px 15px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+            color: white;
+            padding: 45px 30px;
+            text-align: center;
+        }
+        
+        .metric-card .value {
+            background: linear-gradient(135deg, #1E3A8A 0%, #06B6D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @media (max-width: 768px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>{标题}</h1>
-      {副标题}
-    </header>
-    
-    <section class="metrics-grid">
-      {指标卡片}
-    </section>
-    
-    <main class="content">
-      {内容章节}
-    </main>
-    
-    <footer class="footer">
-      {页脚信息}
-    </footer>
-  </div>
+    <div class="container">
+        <header class="header">
+            <h1>{标题}</h1>
+        </header>
+        <section class="metrics-grid">{指标卡片}</section>
+        <main class="content">{内容章节}</main>
+    </div>
 </body>
 </html>
 ```
+
+**完整示例**: 参考 `/home/seasky7/.openclaw/workspace/output/最高检工作报告图解_蓝色商务风格.html`
+
+### 基础结构（其他风格使用）
 
 ---
 
 ## 🎯 参数组合示例
 
-### 示例 1: 会议纪要（默认）⭐
+### 示例 1: 蓝色商务风格（默认）⭐⭐⭐ NEW
 ```
---style "会议纪要"
+--style "蓝色商务风格"
 --device "responsive"
 ```
-**效果**: 专业简洁，浅灰背景 + 白色卡片，指标卡片渐变背景，适合正式报告
+**效果**: 深蓝渐变头部 + 圆形装饰、卡片顶部渐变条、文字渐变效果、悬停动画，适合政府/法律/商务报告 ⭐默认推荐
 
 ### 示例 2: 法律科技报告
 ```
@@ -420,8 +462,8 @@ usage: generate.py [-h] [--color COLOR] [--device DEVICE] [--style STYLE]
                      默认：responsive
   
   --style, -s        风格选择
-                     可选：会议纪要/现代简约/科技感/商务正式/创意活泼/高端奢华
-                     默认：会议纪要 ⭐
+                     可选：蓝色商务风格/会议纪要/现代简约/科技感/商务正式/创意活泼/高端奢华
+                     默认：蓝色商务风格 ⭐⭐⭐
   
   --template, -t     参考图路径（自动提取设计参数）
   
@@ -432,6 +474,7 @@ usage: generate.py [-h] [--color COLOR] [--device DEVICE] [--style STYLE]
 
 ---
 
-**版本**: 3.0 (专业版)  
+**版本**: 3.1 (蓝色商务风格默认版)  
 **创建时间**: 2026-03-20  
+**更新时间**: 2026-03-21 (新增蓝色商务风格为默认模板)  
 **作者**: 嘟嘟 (for seasky7)
